@@ -1,0 +1,428 @@
+% interacttfpsample.tex
+% v1.01 - June 2016
+
+\documentclass[]{interact}
+
+\usepackage{epstopdf}% To incorporate .eps illustrations using PDFLaTeX, etc.
+\usepackage{subfigure}% Support for small, `sub' figures and tables
+\usepackage{enumitem,amssymb}
+\usepackage{multirow}
+\newlist{todolist}{itemize}{2}
+\setlist[todolist]{label=$\square$}
+
+\usepackage{parskip}
+\usepackage[numbers,sort&compress,merge]{natbib}% Citation support using natbib.sty
+\bibpunct[, ]{(}{)}{,}{n}{,}{,}% Citation support using natbib.sty
+\renewcommand\bibfont{\fontsize{10}{12}\selectfont}% Bibliography support using natbib.sty
+\renewcommand\citenumfont[1]{\textit{#1}}% Citation numbers in italic font using natbib.sty
+\renewcommand\bibnumfmt[1]{(#1)}% Parentheses enclose ref. numbers in list using natbib.sty
+
+\theoremstyle{plain}% Theorem-like structures
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\newtheorem{notation}{Notation}
+
+\newenvironment{itquote}
+  {\begin{quote}\itshape}
+  {\end{quote}\ignorespacesafterend}
+\newenvironment{itpars}
+  {\par\itshape}
+  {\par}
+
+\begin{document}
+
+\articletype{Final Project Report - (CSE 505) Computing with Logic}
+
+\title{Why Do Humans Reason the Way They Do? An Empirical Test of Pereira, Dietz, and Hőlldobler's Contextual Abductive Reasoning with Side-Effects}
+
+\author{
+\name{Firman Manda Firmansyah}
+\name{110945596}
+\url{https://github.com/firmansm/CSE-505}
+}
+
+\maketitle
+
+\section{Introduction}
+
+Unlike typical traditional machines, humans have the ability to associate two or more, related or even unrelated events and make such causal relationships or explanations out of them. For instance, when we returned home after travelling for months and found that our front door was unlocked and the key was broken, we might assume that someone must have tampered with the lock and entered our house. Then, when we noticed that some of our valuable belongings were missing, did we start to think further that the person who tampered with the front door must have stolen our belongings. In other words, we believe that there must be some burglars stealing our stuff. These thinking processes are called abductive reasoning (Thagard \& Shelly, 1997). We did not directly observe that someone was tampering with the front door, entering our house, and stealing our valuable belongings, but since we learned from our own or other people’s experience that tampered unlocked doors and missing valued belongings are the consequences of  burglary, we concluded that these thoughts are true. 
+
+Pereira, Dietz, and Hőlldobler (2014) discuss and explain this phenomenon from a logic perspective and call it the side-effect of contextual abductive reasoning. They then model this reasoning under the weak completion semantics (Saldanha, Hölldobler, \& Rocha, 2017) by introducing abduction, and background knowledge. In doing so, they utilize inspection points (Pereira & Pinto, 2011) and reveal a variety of side-effects, such as contextual side effects and jointly supported contextual relevant consequences. In their paper, Pereira, Dietz, and Hőlldobler (2014) give some examples regarding each category of side effects. However, they have not empirically tested yet whether their explanations are common for human mind and holds true in various contexts, and whether each category has the same rate of occurrence.
+
+\section{Project Aims}
+This project aims to review and empirically test the contextual abductive reasoning with side effects as introduced by Pereira, Dietz, and Hőlldobler (2014). Specifically, this project will, first, explain the theoretical framework to a more general audience. It is important since this subject is of interest in various disciplines including but not limited to psychology, cognitive and neuroscience, philosophy, and mathematics. 
+
+Second, this project will test empirically whether the explanations proposed by the authors are common for the human mind, holds true in various contexts, and have the same rate of occurrence. Doing so will give evidence to illustrate how common are the belief-bias and side effects on abductive reasoning that occurs in daily life. Along with this goal, this project will also account for possible variables that may be associated with such biases such as demographics and familiarity with logic computing.
+
+\section{Abductive Reasoning with Side Effects} 
+Pereira, Dietz, and Hőlldobler (2014) build their arguments based on the three-valued logic by Lukasiewicz (1990) and weak completion semantics introduced by Hölldobler and Ramli (2009). Contradict to two-valued logic, under three-valued Lukasiewicz semantics, there are three truth values, those are true, false, and unknown. Unless facts are known to be true or false, they will be considered as unknown. In two-valued logic, on the other hand, if something is known to be not true then it must be false and vice versa, which is also known as closed world assumption (Reiter, 1981). These three truth values have further implications on the interpretation of propositions. For example, a biconditional statement, \textit{Mary will eat ice cream if and only if she goes to Manhattan}. This biconditional statement is denoted as \( ei \leftrightarrow gm \), with \textit{ei} denotes \textit{Mary will eat ice cream}, \textit{gm} denotes \textit{Mary goes to Manhattan}. Under two-valued logic, \( ei \leftrightarrow gm \) has two minimal models. First, both \textit{ei} and \textit{gm} are mapped to true, and second, both \textit{ei} and \textit{gm} are mapped to false. However, when both \textit{ei} and \textit{gm} are mapped to unknown then it is not a model for \( ei \leftrightarrow gm \). 
+
+Furthermore, under weak completion semantics, assumed true facts or inferences are being made in order to complete propositions so that logic program can mimic human reasoning. Using the same context as the previous example, we know that Mary will eat ice cream if she goes to Manhattan. In three valued logic, this proposition is written as \( ei \leftarrow gm \). Suppose we only know the fact that \textit{Mary will eat ice cream}, we can only map true to \textit{ei} \( (ei \gets \top) \) and unknown to \textit{gm} \( (gm \gets U). \) However, since we have background knowledge based on our past experience that every time Mary goes to Manhattan she will eat ice cream \( (ei \gets gm) \), then when we observe Mary eats ice cream \( (ei \gets \top) \), we make assumption that Mary must go to Manhattan \( (gm \gets \top) \). Many people think that this assumption is a true fact derived from logic reasoning, in fact, it is an assumption derived from past experience, whose truth value is still unknown.
+
+Using weak completion semantics in logic programming, Hölldobler and Ramli (2009) represent abductive reasoning process by replacing \( \gets \) with \( \leftrightarrow \) so that assumed true fact or inference can be derived as can be seen in \textit{K}$_{1}$.
+
+\[ K_{1} = \{ ei \leftrightarrow \top, ei \leftrightarrow gm \wedge \neg ab_1,  ab_1 \leftrightarrow \bot \} \]
+
+\( K_{1} \) is a set of definitions which encode the information or background knowledge.  \( \top \) denotes true, \( \bot \) denotes false, and \textit{ab} denotes abduction. The abduction \textit{ab}$_{1}$ represents assumptions which can be overridden if more information becomes available. In reality as described in the previous example, we know that only \textit{ei} is true but under weak completion semantic as denoted in \(K_{1}\), we know that \textit{gm} must be true as well, so that we have new weakly completed set \(K_{2}\) as follows.
+\[ K_{2} = \{ ei \leftrightarrow \top, ei \leftrightarrow gm \wedge \neg ab_1,  ab_1 \leftrightarrow \bot, gm \leftrightarrow \top \} \]
+
+Pereira, Dietz, and Hőlldobler (2014) extend Hölldobler and Ramli (2009)’s work and introduced side effects that explain abductive process in human reasoning. The same example as in Pereira, Dietz, and Hőlldobler (2014)’ work with modification will be used to illustrate abductive reasoning with side effects as follows.
+
+Suppose we know that forest fires are caused by lightning or barbecue. When forest fires occur, the leaves are dry. When it does not rain, the leaves in the forest are also dry. We also know that storm are caused by lightning or tempest. Furthermore, we know that when firefighters are present to extinguish fire they put sirens on. When fire is present and firefighters extinguish them, it causes smoke. In logic program, this background knowledge is written as follows:
+
+\hfill\begin{minipage}{\dimexpr\textwidth-1cm}
+    \begin{flushleft}
+        \(  P = \{
+        \linebreak
+        forestfires \leftarrow inspect(lightning) \wedge  \neg ab_3, \)
+        \linebreak
+        \( forestfires \leftarrow barbecue \wedge  \neg ab_2,\)
+        \linebreak
+        \(ab_3 \leftarrow \neg dryleaves,\)
+        \linebreak
+        \( rained \leftarrow inspect(\neg dryleaves) \wedge  \neg ab_4,\)
+        \linebreak
+        \( storm \leftarrow lightning \wedge  \neg ab_1,\)
+        \linebreak
+        \( storm \leftarrow tempest \wedge  \neg ab_2,\)
+        \linebreak
+        \( smoke \leftarrow fire \wedge  inspect(firefighters),\)
+        \linebreak
+        \( sirens \leftarrow inspect(fire) \wedge  firefighters,\)
+        \linebreak
+        \( ab_1 \leftarrow \bot , ab_2 \leftarrow \bot ,  ab_3 \leftarrow \bot ,  ab_4 \leftarrow \bot \}\)
+    \end{flushleft}
+\end{minipage}
+
+The set of abducibles \textit{A} are written as follows:
+
+\hfill\begin{minipage}{\dimexpr\textwidth-1cm}
+\begin{flushleft}
+    \( A = \{
+    \linebreak
+    tempest \leftarrow  \top , tempest \leftarrow  \bot ,
+    \linebreak
+    barbecue \leftarrow  \top , barbecue \leftarrow  \bot ,
+    \linebreak
+    lightning \leftarrow  \top , lightning \leftarrow  \bot ,
+    \linebreak
+    inspect(lightning) \leftarrow  \top , inspect(lightning) \leftarrow  \bot ,
+    \linebreak
+    dryleaves \leftarrow  \top , dryleaves \leftarrow  \bot ,
+    \linebreak
+    inspect(dryleaves) \leftarrow  \top , inspect(dryleaves) \leftarrow  \bot ,
+    \linebreak
+    fire \leftarrow  \top , fire \leftarrow  \bot ,
+    \linebreak
+    inspect(fire) \leftarrow  \top , inspect(fire) \leftarrow  \bot ,
+    \linebreak
+    firefighters \leftarrow  \top , firefighters \leftarrow  \bot ,
+    \linebreak
+    inspect(firefighters) \leftarrow  \top , inspect(firefighters) \leftarrow  \bot  \} \)
+\end{flushleft}
+\end{minipage}
+
+\subsection{Contextual Side Effect}
+Contextual side effects happen when every explanation for the first observation can make the incomplete explanation for the second observation complete. For example, we observe forest fires \( (O_{1}) \) which can be explained by either lightning, \( (inspect(lightning \leftarrow  \top) \) or barbecue \( (barbecue \leftarrow  \top) \). It should be noted that predicate \textit{inspect} is added to express abnormalities since forest fires are commonly caused by barbecue rather than lightning. We also observe storms and drive leaves \( (O_{2}) \). Storm can be explained by either lightning \( (lightning \leftarrow  \top) \) or tempest \( (tempest \leftarrow  \top) \). 
+
+When humans are asked to abduce what causes storm, they tend to answer lightning because they think that they have evidence that the leaves are dry \(  (dryleaves \leftarrow  \top) \), the storm occurs \(  (storm  \leftarrow  \top) \), and they know that both storm and forest fires share the same cause, lightning \( (forestfires \leftarrow  inspect(lightning) \wedge  \neg ab_3,, storm \leftarrow  lightning \wedge  \neg ab_1) \). Even though humans do not observe lightning directly, they believe it is true because it is the only cause that can explain two observations at relatively the same time. Thus, Pereira, Dietz, and Hőlldobler (2014) argue that observation of forest fires is the contextual side effect of explained observation storm, which lead to abducible lightning as the cause of both observations.
+
+\subsection{Jointly Supported Contextual Relevant Consequence}
+
+Jointly supported contextual relevant consequence occurs when two observations contain side-effects of each other. In this respect, abducible of one observation will lead to abducible of the other observation, and they are mutually explained together, not independent. For example, we observe smoke \( (O_{1}) \). Based on the background knowledge \( P ( smoke \leftarrow  fire \wedge  inspect(firefighters) ) \) we can abduce fire \( (fire \leftarrow  \top) \) but we need to abduce firefighters too \( (inspect(firefighters) \leftarrow  \top) \). Then we hear sirens \( (O_{2}) \), which is based on the background knowledge \( P (sirens \leftarrow  inspect(fire) \wedge  firefighters) \), we can abduce firefighters \( (firefighters \leftarrow  \top) \) but we need to abduce fire too \( (inspect(fire) \leftarrow  \top) \). In this respect, the other abducible is explained by the other explanation so that they mutually support each other.
+
+When humans observe smoke and hear sirens at relatively the same time and are asked what are present, they tend to answer fire and firefighters, even though they do not observe them directly. 
+
+\section{Method}
+
+\subsection{Survey Questionnaires}
+
+This study focuses on the investigation of contextual side-effects and jointly supported contextual relevant consequences by seeking empirical evidence. In doing so, study participants were presented a series of scenarios and asked to answer questions derived from the example given by Pereira, Dietz, and Hőlldobler (2014). Some other examples were also added to test if the side effects also hold in various contexts and should not hold in particular contexts which are not relevant to the topic under study. In addition to those questions, participants were also asked about their education, gender, and familiarity with computing with logic. In total, there are six scenarios and questions related to abductive reasoning with side-effects, and four questions related to demographic. The complete questionnaires can be found in the appendix.
+
+\subsection{Participants}
+
+Participants (\textit{N}=29, male = 79\%) from Stony Brook University and from Indonesia were recruited on a voluntary basis with no material compensation. Regarding the education level, 49\% of the participants hold bachelor’s degree, 38\% hold a master's or doctoral degree, and the rest were high school alumni or hold an associate degree. Regarding the subjects or disciplines, 59\% of participants have studied computer science or mathematics and 55\% have taken a course related to logic.
+
+\subsection{Procedure}
+
+After confirming the willingness to participate on a voluntary basis, participants were sent a link to the online questionnaires and asked to fill them out in one seating. They were told that the questionnaires were not meant to test them but they should use logic to answer the questions. The participants were also instructed to not discuss the questions with others. 
+
+\section{Results}
+
+All questions have the same answers, \textit{unknown}. The percentage of correct answers can be seen in Table 1. On average, only 24\% of participants answer all the questions correctly. This number is higher than previous studies, which investigated similar topics (Byre, 1989). The highest percentage of correct answers are on the forest fires topic with contextual side effects and the lowest percentage of incorrect answer is in the same study topic with jointly supported relevant consequence side-effects.
+
+
+\begin{center}
+Table 1. Percentage of correct answers
+\linebreak
+\begin{tabular}{ |c|c|c|c|c|c| } 
+ \hline
+ Side Effects & Topic & Q & Correct Answers & Proportion Test & Chi-Square Test
+ \\ 
+ \hline
+ \multirow{2}{4em}{Contextual}& \multirow{2}{3em}{Forest fires} & \multirow{2}{1em}{1} & \multirow{2}{1em}{27.59\%} & \chi^2 = 5.8276, & \chi^2 = 1.7241, \\ 
+ & & & & df=1, p = .015^{**} & df=2, p = .422 \\
+  \hline
+ \multirow{2}{4em}{Contextual}& \multirow{2}{3em}{Forest fires} & \multirow{2}{1em}{2} & \multirow{2}{1em}{27.59\%} & \chi^2 = 5.8276, & \chi^2 = 15.379, \\ 
+ & & & & df=1, p = .015^{**} & df=2, \( p<.01^{***} \) \\
+  \hline
+ \multirow{2}{4em}{Contextual}& \multirow{2}{3em}{Study} & \multirow{2}{1em}{3} & \multirow{2}{1em}{24.14\%} & \chi^2 = 7.7586, & \chi^2 = 1.3103, \\ 
+ & & & & df=1, \( p<.01^{***} \) & df=2, p = .520 \\
+  \hline
+ \multirow{2}{4em}{Contextual}& \multirow{2}{3em}{Study} & \multirow{2}{1em}{4} & \multirow{2}{1em}{27.59\%} & \chi^2 = 5.8276, & \chi^2 = .48276, \\ 
+ & & & & df=1, p = .015^{**} & df=2, p = .786 \\
+  \hline
+ \multirow{2}{4em}{Jointly Supported}& \multirow{2}{3em}{Forest fires} & \multirow{2}{1em}{5} & \multirow{2}{1em}{17.24\%} & \chi^2 = 5.8276, & \chi^2 = 1.7241, \\ 
+ & & & & df=1, \( p<.01^{***} \) & df=2, \( p<.01^{***} \) \\
+  \hline
+ \multirow{2}{4em}{Jointly Supported}& \multirow{2}{3em}{Study} & \multirow{2}{1em}{6} & \multirow{2}{1em}{24.14\%} & \chi^2 = 5.8276, & \chi^2 = 1.7241, \\ 
+ & & & & df=1, \( p<.01^{***} \) & df=2, \( p<.01^{***} \) \\
+ \hline
+\end{tabular}
+\end{center}
+
+\linebreak
+
+In addition to calculating the correct answer, proportion test and Chi-Square Test was performed to investigate if the proportions of the answers are different significantly \( (p<.05^{**}, p<.01^{***}).  \) It should be noted, the first test investigated if the proportion of correct answers are significantly different with respect to the wrong answers. Meanwhile, the second test investigated if the proportion of the answer follow a random distribution or not.
+
+As can be seen in Table 1, even though the proportion test reveals that the difference of the proportion of correct and incorrect answers are significantly different for all questions, an interesting pattern emerges in Q1. In this respect, the different test is not significant, which may indicate  that the answers do not follow patterns as predicted and explained by Pereira, Dietz, and Hőlldobler (2014). Thus, in the following section, this case will be discussed in more detail.  
+
+For Q3 and Q4, even though the test results are not significant either, these questions will not be discussed in more detail because they confirm the predicted inferences, which should follow random distribution. The same case also applies to the rest of the questions. They fit with the prediction and explanation proposed by Pereira, Dietz, and Hőlldobler (2014).
+
+In question 1 (Q1), the participants were informed with the following information:
+
+\hfill\begin{minipage}{\dimexpr\textwidth-1cm}
+    \emph{Background knowledge:} 
+    \newline
+    \emph{Forest fires are caused by lightning or barbecue. \newline When forest fires occur, the leaves are dry. \newline A storm is caused by lightning or tempest.}
+    \newline
+    \newline
+    \emph{Observation:}
+    \newline
+    \emph{You observe a storm. \newline The leaves are dry. \newline You observe forest fires.}
+\end{minipage}
+
+Then, the participants were asked the following question.
+
+\hfill\begin{minipage}{\dimexpr\textwidth-1cm}
+    \emph{Query:}
+    \newline
+    \emph{What causes the storm?}
+\end{minipage}
+
+Below are the percentage of their answers:
+
+\begin{center}
+Table 2. Percentage of answers for Q1
+\linebreak
+\begin{tabular}{ |c|c|c| } 
+ \hline
+ Lightning & Tempest & Unknown \\
+ \hline
+ 8 (27.59\%) & 13 (44.83\%) & 8 (27.59\%) \\
+ \hline
+\end{tabular}
+\end{center}
+
+
+Following Pereira, Dietz, and Hőlldobler (2014) and Hölldobler and Kencana Ramli (2009), the statements can be written as follows: 
+
+\hfill\begin{minipage}{\dimexpr\textwidth-1cm}
+\begin{flushleft}
+    \(
+    ForestFires_{1} = \{  
+    \linebreak storm \leftrightarrow  \top, 
+    \linebreak dryleaves  \leftrightarrow  \top, 
+    \linebreak forestfires \leftrightarrow  \top, 
+    \linebreak forestfires \leftrightarrow   ((lightning \wedge  \neg ab_1) \vee  (barbecue \wedge  \neg ab_2)) \wedge  dryleaves, 
+    \linebreak storm \leftrightarrow  (lightning \wedge  \neg ab_3) \vee  (tempest \wedge  \neg ab_4),  
+    \linebreak ab_1 \leftrightarrow  \bot , 
+    \linebreak ab_2 \leftrightarrow  \bot ,
+    \linebreak ab_3 \leftrightarrow  \bot ,
+    \linebreak ab_4 \leftrightarrow  \bot  \} 
+    \)
+\end{flushleft}
+\xdef\tpd{\the\prevdepth}
+\end{minipage}
+
+Since we know that a storm is true and forest fire is true, based on weak completion semantics, we can abduce lightning is true, barbecue is true, and tempest is true. Thus, it updates the set \textit{ForestFires}$_{1}$ become:
+
+\hfill\begin{minipage}{\dimexpr\textwidth-1cm}
+\begin{flushleft}
+    \( 
+    ForestFires_{2} = \{   
+    \linebreak
+    lightning \leftrightarrow  \top, barbecue \leftrightarrow  \top, 
+    \linebreak
+    tempest \leftrightarrow  \top, storm \leftrightarrow  \top, 
+    \linebreak
+    dryleaves  \leftrightarrow  \top,storm \leftrightarrow  \top, 
+    \linebreak
+    dryleaves  \leftrightarrow  \top, forest_fires \leftrightarrow  \top,  
+    \linebreak
+    forestfires \leftrightarrow   ((lightning \wedge  \neg ab_1) \vee  (barbecue \wedge  \neg ab_2)) \wedge  dryleaves, 
+    \linebreak
+    storm \leftrightarrow  (lightning \wedge  \neg ab_3) \vee  (tempest \wedge  \neg ab_4),  
+    \linebreak ab_1 \leftrightarrow  \bot , 
+    \linebreak ab_1 \leftrightarrow  \bot , 
+    \linebreak ab_3 \leftrightarrow  \bot , 
+    \linebreak ab_4 \leftrightarrow  \bot  \} 
+    \)
+\end{flushleft}
+\xdef\tpd{\the\prevdepth}
+\end{minipage}
+
+Based on the explanation of contextual side effects by Pereira, Dietz, and Hőlldobler (2014), it is predicted that humans will likely abduce lightning as the cause of storm because this abducible will also explain the second observation, forest fires, which fits the context, as written in the following set.
+
+\hfill\begin{minipage}{\dimexpr\textwidth-1cm}
+\begin{flushleft}
+    \( ForestFires_{3} = \{   
+    \linebreak lightning \leftrightarrow  \top, 
+    \linebreak storm \leftrightarrow  \top, 
+    \linebreak dryleaves  \leftrightarrow  \top,
+    \linebreak storm \leftrightarrow  \top, 
+    \linebreak dryleaves  \leftrightarrow  \top, 
+    \linebreak forestfires \leftrightarrow  \top,  
+    \linebreak
+    forestfires \leftrightarrow   ((lightning \wedge  \neg ab_1) \vee  (barbecue \wedge  \neg ab_2)) \wedge  dryleaves, 
+    \linebreak
+    storm \leftrightarrow  (lightning \wedge  \neg ab_3) \vee  (tempest \wedge  \neg ab_4),  
+    \linebreak ab_1 \leftrightarrow  \bot , 
+    \linebreak ab_2 \leftrightarrow  \bot ,
+    \linebreak ab_3 \leftrightarrow  \bot , 
+    \linebreak ab_4 \leftrightarrow  \bot  \} \)
+
+\end{flushleft}
+\xdef\tpd{\the\prevdepth}
+\end{minipage}
+
+However, as can be seen in Table 2, most participants (44.83\%) answered this question with tempest. This case is unique because the other question which addressed the same topic and the same problem followed the explanation and prediction by Pereira, Dietz, and Hőlldobler (2014).
+
+To investigate, possible explanation about this inconsistency, multiple linear regressions were performed with respect to demographic variables. However, none of the surveyed variables (education, disciplines, gender, familiarity with logic) can explain the answer pattern (\textit{p} $>$ .10).
+
+\section{Limitation}
+This study used a convenience sample, students at university, with small sample size. Therefore, some cautions should be made in interpreting and generalizing the results. First, different sample size may yield different results, particularly, the one that contradicts the predicted outcomes (Q1). Even though, with small sample size significant results are less likely to be gained, which in turn makes this study stronger, but still, the inconsistency with theory raises a concern. Second, the generalization may only be applicable to the same population, students, and may not be applicable to more general population.
+
+\section{Conclusion and Direction for Future Projects}
+This study aimed to empirically test the explanation of the abductive with side-effects introduced by Pereira, Dietz, and Hőlldobler (2014). Even though five out of six questions confirmed their explanation and prediction, one remaining question is inconsistent with their argument. This inconsistency opens the room for future projects as follows. First, future projects are suggested to replicate the study with a larger sample size and different population. This project will test if the Q1 type will turn to confirm the proposed explanation. Second, future projects are suggested to investigate factors other than logic reasoning processes that may affect the process, for example, psychological factors such as personality or thinking styles. Having done those projects, it is believed will enrich the understanding of human reasoning, which later benefit logic programming in mimicking human reasoning.
+
+\section{References}
+Byrne, R. M. (1989). Suppressing valid inferences with conditionals. \emph{Cognition, 31}(1), 61-83.
+
+Hölldobler, S., \& Ramli, C. D. P. K. (2009, July). Logic programs under three-valued Łukasiewicz semantics. In \emph{International Conference on Logic Programming} (pp. 464-478). Springer, Berlin, Heidelberg.
+
+Lukasiewicz, J. (1990). O logice trójwartosciowej. Ruch Filozoficzny, 5: 169–171, 1920. English translation: On three-valued logic. \emph{Jan Lukasiewicz Selected Works.(L. Borkowski, ed.), North Holland,} 87-88.
+
+Pereira, L. M., Dietz, E. A., \& Hölldobler, S. (2014). Contextual abductive reasoning with side-effects. \emph{Theory and practice of logic programming, 14}(4-5), 633-648.
+
+Pereira, L. M., \& Pinto, A. M. (2011). Inspecting side-effects of abduction in logic programs. In \emph{Logic programming, knowledge representation, and nonmonotonic reasoning} (pp. 148-163). Springer, Berlin, Heidelberg.
+
+Reiter, R. (1981). On closed world databases. In \emph{Readings in artificial intelligence} (pp. 119-140). Morgan Kaufmann.
+
+Saldanha, E. A. D., Hölldobler, S., \& Rocha, I. L. (2017, November). The Weak Completion Semantics. In \emh{Bridging@ CogSci} (pp. 18-30).
+
+Thagard, P., \& Shelley, C. (1997). Abductive reasoning: Logic, visual thinking, and coherence. In \emph{Logic and scientific methods} (pp. 413-427). Springer, Dordrecht.
+
+
+
+\section{Appendix - Study Questionnaires}
+\subsection{Demographics}
+
+Your gender:
+\begin{itemize}
+\item Male
+\item Female
+\end{itemize}
+
+What is the highest degree or level of school you have completed? If currently enrolled, highest degree received: 
+\begin{itemize}
+\item High school, Associate degree, Bachelor's degree, Master's degree, Professional degree, Doctorate Degree
+\item What was the discipline of the highest degree that you have completed?:
+\item 
+Humanities (arts, history, languages and literature, law, philosophy, theology)
+\item 
+Social sciences (anthropology, archaeology, economics, human geography, political science, psychology, sociology, social work),
+\item 
+Natural sciences (biology, chemistry, earth sciences, space sciences, physics),
+Formal sciences (computer science, mathematics, statistics),
+\item 
+Applied sciences (business, engineering and technology, medicine and health)
+\end{itemize}
+
+Have you ever taken any courses on Logic?
+\begin{itemize}
+\item Yes
+\item No
+\end{itemize}
+
+\subsection{Abducible Reasoning with Side Effects}
+
+\emph{Please read these passages and answer the following questions. Be sure you use your logic and reasoning to answer the questions.}
+
+Forest fires are caused by lightning or barbecue. When forest fires occur, the leaves are dry. Storms are caused by lightning or tempest.
+
+(Q1) You observe a storm. The leaves are dry. You observe forest fires. What causes the storm?
+\begin{itemize}
+\item Lightning
+\item Tempest
+\item Unknown
+\end{itemize}
+
+(Q2) You observe a storm. The leaves are dry. You observe forest fires. What causes forest fires?
+\begin{itemize}
+\item Lightning
+\item Tempest
+\item Unknown
+\end{itemize}
+
+\emph{Please read these passages and answer the following questions. Be sure you use your logic and reasoning to answer the questions.}
+
+Forest fires are caused by lightning or barbecue. When a forest fire occurs, the leaves are dry. Storm is caused by lightning or by tempest. When leaves are dry it does not rain in the forest. When forest fires are present and firefighters are extinguishing them, it causes thick smoke. When firefighters are working to extinguish forest fires, they put sirens on. 
+
+(Q5) You observe thick smoke. You hear sirens. What are present?
+\begin{itemize}
+\item Forest fires and firefighters
+\item Forest fires
+\item Firefighters
+\item Unknown
+\end{itemize}
+
+\emph{Please read these passages and answer the following questions. Be sure you use your logic and reasoning to answer the questions.}
+
+Mary studies in the library if she has a reading assignment or a writing project. When Mary studies in the library, the library is open. Elizabeth asks her brother for help if she has a math homework or a writing project.
+
+(Q3) You see Mary studying in the library. The library is open. You see Elizabeth ask her brother for help. Why does Mary study in the library?
+\begin{itemize}
+\item She has reading assignment,
+\item She has writing project,
+\item Unknown
+\end{itemize}
+
+(Q4) You see Mary studying in the library. You see Elizabeth asking her brother for help. Why does Elizabeth ask her brother for help?
+\begin{itemize}
+\item She has a math homework,
+\item She has writing project,
+\item Unknown
+\end{itemize}
+
+\emph{Please read these passages and answer the following questions. Be sure you use your logic and reasoning to answer the questions.}
+
+Mary studies in the library if she has a reading assignment or a writing project. When Mary studies in the library, the library is open. Elizabeth asks her brother for help if she has a math homework or a writing project. When Elizabeth has a math homework and her brother helps her out, Elizabeth turns off the television in the living room. When her brother help Elizabeth do her math homework, Elizabeth’s brother turns on the computer in the living room.
+
+(Q6) You see the television off. You see the computer on. Who are in the living room?
+\begin{itemize}
+\item Elizabeth and her brother,
+\item Elizabeth,
+\item Elizabeth’s brother,
+\item Unknown
+\end{itemize}
+\end{document}
